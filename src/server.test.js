@@ -14,22 +14,43 @@ describe('Server', () => {
         })
     })
 
+    beforeEach( () => {
+        resetHobbits()
+    })
+
     describe('POST', () => {
         it('adds a new Hobbit', () => {
             return supertest(server).post('/')
-                .
+                .send({name: 'Bilbo'})
+                .set('Accept', 'application/json')
+                .expect(201)
+                .expect('Content-Type', /json/i)
+        })
+
+        it('checks the returned number of hobbits in res', () => {
+            return supertest(server).post('/')
+                .send({name: 'Bilbo'})
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/i)
+                .then(res => expect(res.body.hobbits).toBe(1));
+
         })
     })
 
     describe('DELETE', () => {
        
         it ('deletes an existing hobbit using its name', () => {
-            resetHobbits();
             addOneHobbit();
             return supertest(server).del('/Frodo')
             // .send({name: 'Frodo'})
             // .set('Accept', 'application/json')
-            .expect(201);
+            .expect(200);
+        })
+
+        it('checks the returned number of hobbits in res', () => {
+            addOneHobbit();
+            return supertest(server).del('/Frodo')
+                .then(res => expect(res.body.hobbits).toBe(0));
 
         })
     })
