@@ -1,0 +1,7 @@
+
+hobbits = [];
+
+module.exports = {
+    hobbits,
+}
+
